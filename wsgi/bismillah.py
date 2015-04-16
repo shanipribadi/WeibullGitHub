@@ -156,8 +156,14 @@ def index():
 @route('/static/:path#.+#', name='static')
 def static(path):
     return static_file(path, root='static')
-    
+
+import os
+from bottle import TEMPLATE_PATH
+TEMPLATE_PATH.append(os.path.join(os.environ['OPENSHIFT_REPO_DIR'], 'wsgi/views/'))
+  
+'''  
 #test_calc()
 run(host ='localhost', port=8080, debug=True)
+'''
 
     
