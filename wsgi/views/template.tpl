@@ -55,17 +55,56 @@
 				SELAMAT MENCOBA!
 			</div>
 			
-			<form role="form" method="post" enctype= "multipart/form-data" action= "/process">
-				
+					<p class="help-block">
+						Pilih salah satu metode input data
+						1. Masukkan data kegagalan secara manual
+					</p>
+
+			<form method = "post" enctype="multipart/form-data" action= "/process1" target ="_blank">
+			<table border ="1">
+			<thead>
+				<tr>
+					<th>Failure Time</th>
+				</tr>
+			</thead>	
+				<tr>
+					<td><textarea rows ="50" cols = "20" name ="nilai"></textarea>
+					<button type="submit" class="btn btn-default">Hitung</button>
+				</tr>
+
+
+			</table>
+					
+			</form>
+
+					<p class="help-block">
+						2. Masukkan data kegagalan dalam file dengan ekstensi .csv
+					</p>
+
+			<form role="form" method="post" enctype= "multipart/form-data" action= "/process2" target="_blank">
+
 				<div class="form-group">
 					 <label for="exampleInputFile">File input</label><input type="file" name= "upload" id="exampleInputFile">
-					<p class="help-block">
-						Example block-level help text here.
-					</p>
+
 				</div>
-				
-				<button type="submit" class="btn btn-default">Submit</button>
+				<button type="submit" class="btn btn-default">Hitung</button>
 			</form>
+
+			 <p class="help-block">
+				Pilih salah satu data yang hendak diketahui dan masukkan parameter lainnya dibawah ini 
+			</p>
+
+			<div class="form-group">
+				 <label for="exampleInputReliability">Reliability</label><input class="form-control" id="exampleInputReliable" >
+				 <p class="help-block">
+					Atau
+				</p>
+			</div>
+			<div class="form-group">
+				 <label for="exampleInputReliableLife">Reliable Life</label><input class="form-control" id="exampleInputReliableLife">				
+			</div>
+			</form>
+			<button type="submit" class="btn btn-default">Hitung</button>
 		</div>
 	</div>
 </div>

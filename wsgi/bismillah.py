@@ -113,9 +113,36 @@ def weibull_scale_transform(data):
     y = np.log(-np.log(1 - median_rank(len(data))))
     return x, y
 
-@route("/process", method='POST')    
-def process():
-    #tfail = np.array ([101, 172, 184, 274, 378, 704, 1423, 2213, 2965, 5208, 5879, 6336, 6428, 6630, 7563, 10435, 30138, 30580, 38265, 47413, 81607, 158007, 182958])
+@route("/process1", method='POST')    
+def process1():
+    dataString = request.forms.get("nilai")
+    dataArray = dataString.split("\n")
+    tfail = np.array([float(i) for i in dataArray])
+    #tfail = np.loadtxt("Fail_data.csv")
+    x1, y1 = weibull_scale_transform(tfail)
+    t0 = t0_hat(tfail)
+    x2, y2 = weibull_scale_transform(tfail - t0)
+    shape1, scale1 = plot_linreg1(x1,y1)
+    #print ("Reliability: {}".format (reliability(tfail, 0, scale1, shape1)))
+    shape2, scale2 = plot_linreg2(x2,y2)
+    r = reliability(tfail, t0, scale2, shape2)
+    print ("Location:{}".format(t0))  
+    #print ("Reliability: {}".format (reliability(tfail, t0, scale2, shape2)))
+    #print ("Reliable Life: {}".format (reliable_life(r,t0, scale2, shape2)))
+    html = """<html><body> 
+    <img src="data:image/png;base64,{0}"/> 
+    <img src="data:image/png;base64,{1}"/>
+    <br>
+    R^2 = {2} <br>
+    Shape Parameter = {3} <br>
+    Scale Parameter = {4} <br>
+    Location Parameter = {5} <br>
+    </body></html>""".format(base64.encodebytes(output1.getvalue()).decode(), base64.encodebytes(output2.getvalue()).decode(), (r_value**2), scale2, shape2, t0)
+    plt.close()
+    return html
+    
+@route("/process2", method='POST')    
+def process2():
     data = request.files.upload
     dataString = data.file.read().decode("utf-8")
     dataArray = dataString.split("\n")
@@ -125,12 +152,12 @@ def process():
     t0 = t0_hat(tfail)
     x2, y2 = weibull_scale_transform(tfail - t0)
     shape1, scale1 = plot_linreg1(x1,y1)
-    print ("Reliability: {}".format (reliability(tfail, 0, scale1, shape1)))
+    #print ("Reliability: {}".format (reliability(tfail, 0, scale1, shape1)))
     shape2, scale2 = plot_linreg2(x2,y2)
     r = reliability(tfail, t0, scale2, shape2)
     print ("Location:{}".format(t0))  
-    print ("Reliability: {}".format (reliability(tfail, t0, scale2, shape2)))
-    print ("Reliable Life: {}".format (reliable_life(r,t0, scale2, shape2)))
+    #print ("Reliability: {}".format (reliability(tfail, t0, scale2, shape2)))
+    #print ("Reliable Life: {}".format (reliable_life(r,t0, scale2, shape2)))
     html = """<html><body> 
     <img src="data:image/png;base64,{0}"/> 
     <img src="data:image/png;base64,{1}"/>
@@ -139,16 +166,11 @@ def process():
     Shape Parameter = {3} <br>
     Scale Parameter = {4} <br>
     Location Parameter = {5} <br>
-    <div style='float:left;border-style:solid'>
-        Reliability <br> {6} 
-    </div>    
-    <div style='float:left;border-style:solid'>
-        Reliable Life <br> {7} 
-    </div>
-    </body></html>""".format(base64.encodebytes(output1.getvalue()).decode(), base64.encodebytes(output2.getvalue()).decode(), (r_value**2), scale2, shape2, t0, "<br>".join(map(str, reliability(tfail, t0, scale2, shape2))), "<br>".join(map(str, reliable_life(r,t0, scale2, shape2))))
+    </body></html>""".format(base64.encodebytes(output1.getvalue()).decode(), base64.encodebytes(output2.getvalue()).decode(), (r_value**2), scale2, shape2, t0)
     plt.close()
     return html
-    
+
+  
 @route("/")
 def index():
     return template('template')
@@ -156,14 +178,8 @@ def index():
 @route('/static/:path#.+#', name='static')
 def static(path):
     return static_file(path, root='static')
-
-import os
-from bottle import TEMPLATE_PATH
-TEMPLATE_PATH.append(os.path.join(os.environ['OPENSHIFT_REPO_DIR'], 'wsgi/views/'))
-  
-'''  
+    
 #test_calc()
 run(host ='localhost', port=8080, debug=True)
-'''
 
     
