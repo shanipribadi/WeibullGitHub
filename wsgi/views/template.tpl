@@ -60,7 +60,7 @@
 						1. Masukkan data kegagalan secara manual
 					</p>
 
-			<form method = "post" enctype="multipart/form-data" action= "/process1" target ="_blank">
+			<form method = "post" enctype="multipart/form-data" action= "/process" target ="_blank">
 			<table border ="1">
 			<thead>
 				<tr>
@@ -68,7 +68,7 @@
 				</tr>
 			</thead>	
 				<tr>
-					<td><textarea rows ="50" cols = "20" name ="nilai"></textarea>
+					<td><textarea rows ="50" cols = "20" name ="inputdata"></textarea>
 					<button type="submit" class="btn btn-default">Hitung</button>
 				</tr>
 
@@ -81,10 +81,10 @@
 						2. Masukkan data kegagalan dalam file dengan ekstensi .csv
 					</p>
 
-			<form role="form" method="post" enctype= "multipart/form-data" action= "/process2" target="_blank">
+			<form role="form" method="post" enctype= "multipart/form-data" action="/process?upload=1" target="_blank">
 
 				<div class="form-group">
-					 <label for="exampleInputFile">File input</label><input type="file" name= "upload" id="exampleInputFile">
+					 <label for="exampleInputFile">File input</label><input type="file" name= "inputfile" id="exampleInputFile">
 
 				</div>
 				<button type="submit" class="btn btn-default">Hitung</button>
