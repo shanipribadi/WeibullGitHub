@@ -55,8 +55,8 @@ def plot_linreg(x,y, output, draw_line=False):
     plt.grid()
     fig.savefig(output,format="jpeg");
     output.seek(0)
-    print("R^2: {}".format(r_value**2))
-    print("Shape:{} Scale:{}".format(slope, np.exp(-intercept/slope)))
+    #print("R^2: {}".format(r_value**2))
+    #print("Shape:{} Scale:{}".format(slope, np.exp(-intercept/slope)))
     return slope, np.exp(-intercept/slope), r_value
 
 def reliability(t, loc, scale, shape):
@@ -86,8 +86,23 @@ def weibull_scale_transform(data):
     y = np.log(-np.log(1 - median_rank(len(data))))
     return x, y
 
-@route("/process", method='POST')
-def process():
+@route("/relia", method="POST")
+def relia():
+    if request.query.inv == "1":
+        r = float(request.forms.get("reliability"))
+        content = "Reliable Life: {}".format(reliable_life(r, t0, scale, shape))
+    else:
+        tfail = float(request.forms.get("tfail"))
+        content = "Reliability: {}".format(reliability(tfail, t0, scale, shape))
+
+    html = """<html><body>
+    {0}
+    </body></html>""".format(content)
+
+    return html
+
+@route("/fitting", method='POST')
+def fitting():
     #tfail = np.loadtxt("Fail_data.csv")
     if request.query.upload == "1":
         input_data = request.files.inputfile.file
@@ -118,11 +133,21 @@ def process():
     Shape Parameter = {3} <br>
     Scale Parameter = {4} <br>
     Location Parameter = {5} <br>
-    </body></html>""".format(base64.encodebytes(output1.getvalue()).decode(),
+    <form action="/relia?inv=1", method='post'>
+        Reliability: <input name="reliability" type='text' />
+        <input value="Hitung Reliable Life" type='submit' />
+    </form>
+    <br>
+    <form action="/relia", method='post'>
+        Reliable Life: <input name="tfail" type='text' />
+        <input value="Hitung Reliability" type='submit' />
+    </form>
+    </body>
+    </html>""".format(base64.encodebytes(output1.getvalue()).decode(),
             base64.encodebytes(output2.getvalue()).decode(),
             (r_value2**2),
-            scale2,
             shape2,
+            scale2,
             t0)
     plt.close()
     return html

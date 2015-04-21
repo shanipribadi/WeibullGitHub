@@ -60,7 +60,7 @@
 						1. Masukkan data kegagalan secara manual
 					</p>
 
-			<form method = "post" enctype="multipart/form-data" action= "/process" target ="_blank">
+			<form method = "post" enctype="multipart/form-data" action= "/fitting" target ="_blank">
 			<table border ="1">
 			<thead>
 				<tr>
@@ -81,30 +81,14 @@
 						2. Masukkan data kegagalan dalam file dengan ekstensi .csv
 					</p>
 
-			<form role="form" method="post" enctype= "multipart/form-data" action="/process?upload=1" target="_blank">
+			<form role="form" method="post" enctype= "multipart/form-data" action="/fitting?upload=1" target="_blank">
 
 				<div class="form-group">
 					 <label for="exampleInputFile">File input</label><input type="file" name= "inputfile" id="exampleInputFile">
 
 				</div>
 				<button type="submit" class="btn btn-default">Hitung</button>
-			</form>
-
-			 <p class="help-block">
-				Pilih salah satu data yang hendak diketahui dan masukkan parameter lainnya dibawah ini 
-			</p>
-
-			<div class="form-group">
-				 <label for="exampleInputReliability">Reliability</label><input class="form-control" id="exampleInputReliable" >
-				 <p class="help-block">
-					Atau
-				</p>
-			</div>
-			<div class="form-group">
-				 <label for="exampleInputReliableLife">Reliable Life</label><input class="form-control" id="exampleInputReliableLife">				
-			</div>
-			</form>
-			<button type="submit" class="btn btn-default">Hitung</button>
+			
 		</div>
 	</div>
 </div>
